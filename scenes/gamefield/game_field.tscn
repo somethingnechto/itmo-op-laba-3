@@ -1,0 +1,198 @@
+[gd_scene format=3 uid="uid://cjf5mbg81pi7n"]
+
+[ext_resource type="Texture2D" uid="uid://cg6jif7davinb" path="res://assets/durka.jpg" id="1_cwtrq"]
+[ext_resource type="Material" uid="uid://b4uqii7gfoier" path="res://assets/prototype-material/PROTOTYPE_BLUE.tres" id="1_vxt06"]
+[ext_resource type="Script" uid="uid://nm5etrmuay87" path="res://scenes/gamefield/GameManager.cs" id="1_y310m"]
+[ext_resource type="PackedScene" uid="uid://drgfx2wvw75pj" path="res://scenes/enemy/enemy.tscn" id="2_vxt06"]
+[ext_resource type="PackedScene" uid="uid://d26jmq3xleqgh" path="res://scenes/core/core.tscn" id="4_ocywl"]
+[ext_resource type="PackedScene" uid="uid://dka0jyleiqfbp" path="res://scenes/player/player.tscn" id="5_icfae"]
+[ext_resource type="PackedScene" uid="uid://dva3h3iv3y5h1" path="res://scenes/tower/tower.tscn" id="5_jb8so"]
+[ext_resource type="PackedScene" uid="uid://cr4xhwtgc6cdr" path="res://scenes/tower/lightning_tower.tscn" id="6_2burq"]
+[ext_resource type="PackedScene" uid="uid://c2g0lb6i8717h" path="res://scenes/tower/freezing_tower.tscn" id="7_0e3qn"]
+[ext_resource type="PackedScene" uid="uid://bqgch61sow65j" path="res://scenes/enemy/crawler.tscn" id="8_po1rk"]
+[ext_resource type="PackedScene" uid="uid://u76n66ve2bhq" path="res://scenes/tower/tower_ghost.tscn" id="8_wmqb8"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_icfae"]
+panorama = ExtResource("1_cwtrq")
+
+[sub_resource type="Sky" id="Sky_vxt06"]
+sky_material = SubResource("PanoramaSkyMaterial_icfae")
+
+[sub_resource type="Environment" id="Environment_fd1hh"]
+background_mode = 2
+sky = SubResource("Sky_vxt06")
+ambient_light_source = 3
+ambient_light_color = Color(1, 0.8117647, 0.80784315, 1)
+ambient_light_energy = 1.33
+glow_enabled = true
+glow_blend_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fd1hh"]
+size = Vector3(200, 1, 200)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fd1hh"]
+size = Vector2(200, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3mdvv"]
+albedo_color = Color(0.99042743, 0.84118265, 0.99186665, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_myoks"]
+size = Vector3(50.41858, 23.332458, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_icfae"]
+size = Vector3(1.420929, 23.332458, 31.733887)
+
+[node name="GameField" type="Node3D" unique_id=95870409 node_paths=PackedStringArray("HBoxContainer", "TowerGhost", "Core", "CoreHealthLabel", "PlayerHealthLabel", "MoneyAmountLabel", "Player")]
+script = ExtResource("1_y310m")
+HBoxContainer = NodePath("Control/HBoxContainer")
+TowerGhost = NodePath("GhostTower")
+Core = NodePath("Core")
+CoreHealthLabel = NodePath("Control/VBoxContainer/HBoxContainer/CoreHealthLabel")
+PlayerHealthLabel = NodePath("Control/VBoxContainer/HBoxContainer/PlayerHealthLabel")
+MoneyAmountLabel = NodePath("Control/VBoxContainer/Label")
+PlayerScene = ExtResource("5_icfae")
+Player = NodePath("Player")
+EnemyScenes = Array[PackedScene]([ExtResource("2_vxt06"), ExtResource("8_po1rk")])
+TowerScenes = Array[PackedScene]([ExtResource("5_jb8so"), ExtResource("6_2burq"), ExtResource("7_0e3qn")])
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1771124008]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 16.723907, 0)
+projection = 1
+size = 20.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=660046987]
+transform = Transform3D(0.48652938, -0.25706285, 0.8349897, 0, 0.9557331, 0.29423532, -0.8736643, -0.14315413, 0.46499225, 0, 0, 0)
+light_color = Color(1, 0.2901961, 0, 1)
+light_energy = 5.055
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1506913660]
+environment = SubResource("Environment_fd1hh")
+
+[node name="Floor" type="Node3D" parent="." unique_id=570947843]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor" unique_id=1710108280]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=1106796388]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_fd1hh")
+debug_color = Color(0, 0.98474777, 1.1403753, 0.80784315)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=180821879]
+material_override = ExtResource("1_vxt06")
+mesh = SubResource("PlaneMesh_fd1hh")
+surface_material_override/0 = SubResource("StandardMaterial3D_3mdvv")
+
+[node name="Player" parent="." unique_id=255321172 instance=ExtResource("5_icfae")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="Core" parent="." unique_id=1144120572 instance=ExtResource("4_ocywl")]
+
+[node name="Control" type="Control" parent="." unique_id=1782647980]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1669768399]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer" unique_id=318517240]
+layout_mode = 2
+
+[node name="CoreHealthLabel" type="Label" parent="Control/VBoxContainer/HBoxContainer" unique_id=1446580818]
+layout_mode = 2
+text = "Core health: "
+
+[node name="PlayerHealthLabel" type="Label" parent="Control/VBoxContainer/HBoxContainer" unique_id=553077967]
+layout_mode = 2
+text = "Player Health: "
+
+[node name="Label" type="Label" parent="Control/VBoxContainer" unique_id=1298041033]
+layout_mode = 2
+text = "Scrap: "
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=1765316104]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="ButtonTower" type="Button" parent="Control/HBoxContainer" unique_id=2114204260]
+layout_mode = 2
+text = "Spawn regular tower (10 scrap)"
+
+[node name="ButtonFreezeTower" type="Button" parent="Control/HBoxContainer" unique_id=1398948380]
+layout_mode = 2
+text = "Spawn freezing tower (20 scrap)"
+
+[node name="ButtonLightningTower" type="Button" parent="Control/HBoxContainer" unique_id=493250860]
+layout_mode = 2
+text = "Spawn lightning tower (20 scrap)"
+
+[node name="BuildingModeInfoLabel" type="Label" parent="Control" unique_id=347376677]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -254.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "Press \"Q\" to enter building mode"
+
+[node name="Walls" type="Node" parent="." unique_id=2009779086]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls" unique_id=1799075746]
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D" unique_id=255406908]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32917786, -2.565216, -10.63235)
+shape = SubResource("BoxShape3D_myoks")
+debug_color = Color(0.9114527, 0.27398315, 0.28550094, 0.99215686)
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Walls" unique_id=1312706639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 21.11243)
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D2" unique_id=1798825832]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32917786, -2.565216, -10.361203)
+shape = SubResource("BoxShape3D_myoks")
+debug_color = Color(0.9114527, 0.27398315, 0.28550094, 0.99215686)
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Walls" unique_id=1174442575]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 21.11243)
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D3" unique_id=266519428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.568096, -2.565216, -22.207397)
+shape = SubResource("BoxShape3D_icfae")
+debug_color = Color(0.9114527, 0.27398315, 0.28550094, 0.99215686)
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Walls" unique_id=233025565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.290924, 0, 21.11243)
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D4" unique_id=930930053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.728083, -2.565216, -22.207397)
+shape = SubResource("BoxShape3D_icfae")
+debug_color = Color(0.9114527, 0.27398315, 0.28550094, 0.99215686)
+
+[node name="GhostTower" parent="." unique_id=1329108763 instance=ExtResource("8_wmqb8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09445953, 0.5, 4.876355)
+visible = false
+
+[connection signal="pressed" from="Control/HBoxContainer/ButtonTower" to="." method="OnTowerButtonPressed"]
+[connection signal="pressed" from="Control/HBoxContainer/ButtonFreezeTower" to="." method="OnFreezeButtonPressed"]
+[connection signal="pressed" from="Control/HBoxContainer/ButtonLightningTower" to="." method="OnLightningButtonPressed"]

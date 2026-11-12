@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://der6eocidlm5w"]
+
+[ext_resource type="Script" uid="uid://cp2d8nn2lolc7" path="res://scenes/bullet/Bullet.cs" id="1_wb8hr"]
+[ext_resource type="Shader" uid="uid://cv0hpp8f23xeo" path="res://scenes/bullet/lightning_bullet.gdshader" id="2_4lm37"]
+[ext_resource type="Script" uid="uid://btlxm8t4no1m" path="res://components/ShockingComponent.cs" id="2_wb8hr"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rwd7f"]
+radius = 0.2
+
+[sub_resource type="TorusMesh" id="TorusMesh_fd1hh"]
+inner_radius = 0.18
+outer_radius = 0.126
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wo6ac"]
+render_priority = 0
+shader = ExtResource("2_4lm37")
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/emission_color = Color(1, 1, 0, 1)
+shader_parameter/emission_energy = 9.0
+shader_parameter/jagged_amount = 0.05
+shader_parameter/jagged_frequency = 67.0
+shader_parameter/speed = 10.0
+
+[node name="Bullet" type="Area3D" unique_id=552925160 node_paths=PackedStringArray("damagingComponent")]
+collision_mask = 2
+script = ExtResource("1_wb8hr")
+damagingComponent = NodePath("ShockingComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1679617565]
+shape = SubResource("SphereShape3D_rwd7f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1167603337]
+gi_mode = 2
+mesh = SubResource("TorusMesh_fd1hh")
+surface_material_override/0 = SubResource("ShaderMaterial_wo6ac")
+
+[node name="ShockingComponent" type="Area3D" parent="." unique_id=880084295]
+collision_mask = 2
+script = ExtResource("2_wb8hr")
+JumpRange = 8.0
+metadata/_custom_type_script = "uid://btlxm8t4no1m"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="ShockingComponent" unique_id=57326633]
+shape = SubResource("SphereShape3D_rwd7f")
+
+[connection signal="body_entered" from="ShockingComponent" to="ShockingComponent" method="OnAreaBodyEntered"]
+[connection signal="body_exited" from="ShockingComponent" to="ShockingComponent" method="OnBodyExited"]

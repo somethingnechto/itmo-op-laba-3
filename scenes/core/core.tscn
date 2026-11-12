@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://d26jmq3xleqgh"]
+
+[ext_resource type="Shader" uid="uid://brmxnoyxjrwv8" path="res://scenes/core/core.gdshader" id="1_3swme"]
+[ext_resource type="Script" uid="uid://yqlf6heqd0o8" path="res://components/HealthComponent.cs" id="2_5kgel"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_5kgel"]
+radius = 1.0
+height = 1.75
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2t7qy"]
+render_priority = 0
+shader = ExtResource("1_3swme")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fd1hh"]
+radius = 1.0
+
+[node name="Core" type="CharacterBody3D" unique_id=1144120572 groups=["Tower"]]
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1462445906]
+mesh = SubResource("SphereMesh_5kgel")
+surface_material_override/0 = SubResource("ShaderMaterial_2t7qy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2025015219]
+shape = SubResource("SphereShape3D_fd1hh")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=215015263]
+script = ExtResource("2_5kgel")
+MaxHealth = 400.0
+metadata/_custom_type_script = "uid://yqlf6heqd0o8"

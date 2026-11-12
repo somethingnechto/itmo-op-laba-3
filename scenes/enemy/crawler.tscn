@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://bqgch61sow65j"]
+
+[ext_resource type="Script" uid="uid://yqlf6heqd0o8" path="res://components/HealthComponent.cs" id="1_6pvkt"]
+[ext_resource type="Script" uid="uid://b63cgaeoe0rc7" path="res://components/DamagingComponent.cs" id="4_hxeoq"]
+[ext_resource type="Script" uid="uid://bdjsjst85jqtq" path="res://components/MoveComponent.cs" id="4_wmufq"]
+[ext_resource type="Script" uid="uid://bnjreyy3lgf07" path="res://components/VisibilityComponent.cs" id="5_k5eq8"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_fd1hh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_myoks"]
+albedo_color = Color(0.8392157, 0, 0, 1)
+metallic = 1.0
+metallic_specular = 0.74
+roughness = 0.4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fd1hh"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fd1hh"]
+radius = 12.593338
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hxeoq"]
+size = Vector3(1.2, 1.2, 1.2)
+
+[node name="Crawler" type="CharacterBody3D" unique_id=16030738 groups=["Enemy"]]
+collision_layer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1868945433]
+mesh = SubResource("PrismMesh_fd1hh")
+surface_material_override/0 = SubResource("StandardMaterial3D_myoks")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=179836231]
+shape = SubResource("BoxShape3D_fd1hh")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=610614858]
+script = ExtResource("1_6pvkt")
+MaxHealth = 75.0
+metadata/_custom_type_script = "uid://yqlf6heqd0o8"
+
+[node name="MoveComponent" type="Node" parent="." unique_id=2016449911]
+script = ExtResource("4_wmufq")
+Speed = 4.5
+metadata/_custom_type_script = "uid://bdjsjst85jqtq"
+
+[node name="VisibilityComponent" type="Area3D" parent="." unique_id=328206422 node_paths=PackedStringArray("moveComponent")]
+collision_layer = 2
+script = ExtResource("5_k5eq8")
+moveComponent = NodePath("../MoveComponent")
+metadata/_custom_type_script = "uid://bnjreyy3lgf07"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilityComponent" unique_id=943740150]
+shape = SubResource("SphereShape3D_fd1hh")
+
+[node name="DamagingComponent" type="Area3D" parent="." unique_id=305438151]
+collision_layer = 2
+script = ExtResource("4_hxeoq")
+Damage = 25.0
+TimeBetweenAttacks = 1.0
+metadata/_custom_type_script = "uid://b63cgaeoe0rc7"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DamagingComponent" unique_id=679657783]
+shape = SubResource("BoxShape3D_hxeoq")
+
+[connection signal="body_entered" from="DamagingComponent" to="DamagingComponent" method="OnAreaBodyEntered"]
+[connection signal="body_exited" from="DamagingComponent" to="DamagingComponent" method="OnBodyExited"]

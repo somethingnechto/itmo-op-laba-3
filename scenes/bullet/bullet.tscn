@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cj8rxahbt7e2x"]
+
+[ext_resource type="Script" uid="uid://cp2d8nn2lolc7" path="res://scenes/bullet/Bullet.cs" id="1_7c8un"]
+[ext_resource type="Script" uid="uid://b63cgaeoe0rc7" path="res://components/DamagingComponent.cs" id="2_83itf"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rwd7f"]
+radius = 0.2
+
+[sub_resource type="TorusMesh" id="TorusMesh_fd1hh"]
+inner_radius = 0.18
+outer_radius = 0.126
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_myoks"]
+albedo_color = Color(1, 0, 0.74509805, 1)
+emission_enabled = true
+emission = Color(0.36078432, 1, 0.18039216, 1)
+emission_energy_multiplier = 134.29
+
+[node name="Bullet" type="Area3D" unique_id=552925160 node_paths=PackedStringArray("damagingComponent")]
+collision_mask = 2
+script = ExtResource("1_7c8un")
+damagingComponent = NodePath("DamagingComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1679617565]
+shape = SubResource("SphereShape3D_rwd7f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1167603337]
+gi_mode = 2
+mesh = SubResource("TorusMesh_fd1hh")
+surface_material_override/0 = SubResource("StandardMaterial3D_myoks")
+
+[node name="DamagingComponent" type="Area3D" parent="." unique_id=1395257968]
+collision_mask = 2
+script = ExtResource("2_83itf")
+metadata/_custom_type_script = "uid://b63cgaeoe0rc7"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="DamagingComponent" unique_id=860100067]
+shape = SubResource("SphereShape3D_rwd7f")
+
+[connection signal="body_entered" from="DamagingComponent" to="DamagingComponent" method="OnAreaBodyEntered"]

@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://dka0jyleiqfbp"]
+
+[ext_resource type="Script" uid="uid://bdjsjst85jqtq" path="res://components/MoveComponent.cs" id="1_8afob"]
+[ext_resource type="Script" uid="uid://o37gxj4s50bf" path="res://components/ShootComponent.cs" id="2_gmlin"]
+[ext_resource type="PackedScene" uid="uid://cj8rxahbt7e2x" path="res://scenes/bullet/bullet.tscn" id="3_lvxji"]
+[ext_resource type="Script" uid="uid://yqlf6heqd0o8" path="res://components/HealthComponent.cs" id="4_lvxji"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_fd1hh"]
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8afob"]
+albedo_color = Color(0.21176471, 0.8627451, 0.26666668, 1)
+metallic = 1.0
+roughness = 0.65
+roughness_texture_channel = 3
+clearcoat_enabled = true
+clearcoat_roughness = 0.25
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 1.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fd1hh"]
+height = 1.5961914
+
+[sub_resource type="PrismMesh" id="PrismMesh_fd1hh"]
+size = Vector3(0.4, 0.4, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rwd7f"]
+metallic = 1.0
+roughness = 0.35
+
+[node name="Player" type="CharacterBody3D" unique_id=255321172]
+collision_mask = 129
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2043683951]
+mesh = SubResource("SphereMesh_fd1hh")
+surface_material_override/0 = SubResource("StandardMaterial3D_8afob")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1910100076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2019043, 0)
+shape = SubResource("CapsuleShape3D_fd1hh")
+
+[node name="MoveComponent" type="Node" parent="." unique_id=922880785]
+script = ExtResource("1_8afob")
+Speed = 5.0
+IsControllable = true
+metadata/_custom_type_script = "uid://bdjsjst85jqtq"
+
+[node name="ShootComponent" type="Node3D" parent="." unique_id=249794374]
+script = ExtResource("2_gmlin")
+BulletScene = ExtResource("3_lvxji")
+BulletDamage = 25.0
+FireRate = 1.5
+BulletSpeed = 30.0
+IsControllable = true
+metadata/_custom_type_script = "uid://o37gxj4s50bf"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ShootComponent" unique_id=505087315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("PrismMesh_fd1hh")
+surface_material_override/0 = SubResource("StandardMaterial3D_rwd7f")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1297309591]
+script = ExtResource("4_lvxji")
+metadata/_custom_type_script = "uid://yqlf6heqd0o8"
